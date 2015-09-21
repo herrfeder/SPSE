@@ -1,0 +1,28 @@
+﻿Unsichere Objektreferenzierung
+
+Allgemein
+- eine Anwendung liefert einen direkten Zugang zu Objekten basierend auf Benutzereingabe
+	→ ein Angreifer kann die Authorisierung umgehen und Systemressourcen direkt erreichen
+
+- wird durch Modifizierung eines Parameters erreicht, um ein Objekt direkt zu erreichen, da unzureichende Authoritätschecks durchgeführt werden
+
+How to Test?
+- zuerst muss der Angreifer herausfinden, wo in der Anwendung Objekte direkt referenziert werden
+- dann muss versucht werden, den geforderten Parameter zu modifzieren um versteckte Objekte, Objekte die für andere Nutzer gedacht sind oder in anderer Form die Authorisierung zu umgehen
+
+- eine gute Möglichkeit zum Test sind mind. Zwei User-Zugänge mit unterschiedlichen Rechten in einer Anwendung(„Admin“ und „Einfacher Nutzer“)
+- nachdem beim „Admin“ versch. Objekte referenziert wurden, kann versucht werden, diese ebenfalls als „Einfacher Nutzer“ zu  erreichen
+- ist dies in irgendeiner Form möglich, können unsichere Objektverweise vorliegen
+
+Beispiele
+
++ Ein Parameter-Wert wird direkt genutzt um eine Datei-Ressource zu erreichen
+
++ Ein Parameter-Wert wird direkt genutzt um eine Anwendungs-Operation auszuführen
+	- z.B. könnte durch diese User-Angabe der Passwortwechsel für einen bestimmten User 	benutzt werden
+
+Mögliche Server-Implementierung
+	
++ PHP- Realisierung zur Abfrage  des „acct“(Account)-Wertes
+	- da der Wert für „acct“ nicht überprüft wird, können über den Query auch andere Accounts 	gewählt werden
+

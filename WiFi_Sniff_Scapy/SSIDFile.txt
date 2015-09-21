@@ -1,0 +1,4 @@
+5e:f9:6a:b5:db:a9	HUAWEI-E5372-DBA8	short-slot+ESS+privacy
+f8:01:13:c9:d0:b9	SkyNet	short-slot+ESS+privacy
+78:54:2e:9f:12:70	Ares	short-slot+ESS+privacy+short-preamble
+ae:fa:ba:55:3f:4f	Annis iPad	res8+short-slot+ESS+privacy

