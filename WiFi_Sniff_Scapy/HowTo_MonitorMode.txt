@@ -1,0 +1,107 @@
+Airmon-ng
+Description
+
+This script can be used to enable monitor mode on wireless interfaces. It may also be used to go back from monitor mode to managed mode. Entering the airmon-ng command without parameters will show the interfaces status.
+Usage
+
+usage: airmon-ng <start|stop> <interface> [channel] or airmon-ng <check|check kill>
+
+Where:
+
+    <start|stop> indicates if you wish to start or stop the interface. (Mandatory)
+    <interface> specifies the interface. (Mandatory)
+    [channel] optionally set the card to a specific channel.
+    <check|check kill> “check” will show any processes that might interfere with the aircrack-ng suite. It is strongly recommended that these processes be eliminated prior to using the aircrack-ng suite. “check kill” will check and kill off processes that might interfere with the aircrack-ng suite. For “check kill” see
+
+Usage Examples
+Typical Uses
+
+To start wlan0 in monitor mode: airmon-ng start wlan0
+
+To start wlan0 in monitor mode on channel 8: airmon-ng start wlan0 8
+
+To stop wlan0: airmon-ng stop wlan0
+
+To check the status: airmon-ng
+Madwifi-ng driver monitor mode
+
+This describes how to put your interface into monitor mode. After starting your computer, enter “iwconfig” to show you the current status of the wireless interfaces. It likely looks similar the following output.
+
+Enter “iwconfig”:
+
+ lo        no wireless extensions.
+ 
+ eth0      no wireless extensions.
+ 
+ wifi0     no wireless extensions.
+ 
+ ath0      IEEE 802.11b  ESSID:""  Nickname:""
+           Mode:Managed  Channel:0  Access Point: Not-Associated   
+           Bit Rate:0 kb/s   Tx-Power:0 dBm   Sensitivity=0/3  
+           Retry:off   RTS thr:off   Fragment thr:off
+           Encryption key:off
+           Power Management:off
+           Link Quality:0  Signal level:0  Noise level:0
+           Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+           Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+If you want to use ath0 (which is already used):
+
+airmon-ng stop ath0
+
+And the system will respond:
+
+ Interface       Chipset         Driver
+ 
+ wifi0           Atheros         madwifi-ng
+ ath0            Atheros         madwifi-ng VAP (parent: wifi0) (VAP destroyed)
+
+Now, if you do “iwconfig”:
+
+System responds:
+
+ lo        no wireless extensions.
+ 
+ eth0      no wireless extensions.
+ 
+ wifi0     no wireless extensions.
+
+You can see ath0 is gone.
+
+To start ath0 in monitor mode: airmon-ng start wifi0
+
+System responds:
+
+ Interface       Chipset         Driver
+ 
+ wifi0           Atheros         madwifi-ng
+ ath0            Atheros         madwifi-ng VAP (parent: wifi0) (monitor mode enabled)
+
+Now enter “iwconfig”
+
+System responds:
+
+ lo        no wireless extensions.
+ 
+ eth0      no wireless extensions.
+ 
+ wifi0     no wireless extensions.
+ 
+ ath0      IEEE 802.11g  ESSID:""  
+        Mode:Monitor  Frequency:2.452 GHz  Access Point: 00:0F:B5:88:AC:82   
+        Bit Rate=2 Mb/s   Tx-Power:18 dBm   Sensitivity=0/3  
+        Retry:off   RTS thr:off   Fragment thr:off
+        Encryption key:off
+        Power Management:off
+        Link Quality=0/94  Signal level=-96 dBm  Noise level=-96 dBm
+        Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+        Tx excessive retries:0  Invalid misc:0   Missed beacon:0
+
+You can see ath0 is in monitor mode. Also make sure the essid, nickname and encryption have not been set. The access point shows the MAC address of the card. The MAC address of the card is only shown when using the madwifi-ng driver. Other drivers do not show the MAC address of the card.
+
+If ath1/ath2 etc. is running then stop them first prior to all the commands above:
+
+ airmon-ng stop ath1
+
+You can set the channel number by adding it to the end: airmon-ng start wifi0 9
+
